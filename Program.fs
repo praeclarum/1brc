@@ -134,12 +134,12 @@ let mmapPtr (measurementsPath : string) =
                         Count = entry.Count + 1
                     }
                 | false ->
-                    stations.[name] <- {
+                    stations.Add(name, {
                         Min = temp
                         Max = temp
                         Sum = temp
                         Count = 1
-                    }
+                    })
                 count <- count + 1
                 p <- NativePtr.add p (int newlineIndex + 1)
                 plength <- plength - (newlineIndex + 1L)

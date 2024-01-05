@@ -4,4 +4,5 @@
 let measurementsPath = "/Users/fak/Projects/1brc-main/measurements.txt"
 
 // Baseline.run measurementsPath
-MemoryMapped.run measurementsPath
+// MemoryMapped.run measurementsPath
+Lexed.run measurementsPath

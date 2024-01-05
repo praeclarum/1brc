@@ -35,7 +35,7 @@ let inline parseTemp (pbytes : nativeptr<byte>) : double =
     Utf8Parser.TryParse(span, &result) |> ignore
     result
 
-let utf8 = System.Text.Encoding.UTF8
+let private utf8 = System.Text.Encoding.UTF8
 
 let run (measurementsPath : string) =
     let mmap = MemoryMappedFiles.MemoryMappedFile.CreateFromFile(measurementsPath, FileMode.Open)

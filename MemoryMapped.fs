@@ -23,11 +23,10 @@ let inline pbytesIndexOf (pbytes : nativeptr<byte>) (length: int64) (v : byte) :
             i <- i + 1L
     if run then -1 else i
 
-let parseTemp (pbytes : nativeptr<byte>) : double =
+let inline parseTemp (pbytes : nativeptr<byte>) : double =
     // Find the '.'
     let mutable doti: int = 0
-    let dot = '.' |> byte
-    while NativePtr.get pbytes doti <> dot do
+    while NativePtr.get pbytes doti <> '.'B do
         doti <- doti + 1
     let endi = doti + 2
     let length = endi + 1

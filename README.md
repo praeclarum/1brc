@@ -11,10 +11,11 @@ Tested on a 3GHz 10-core Xeon W iMac Pro 2017.
 |---|-----------------|--------------------|-----|---------------|
 | 1.| 00:02.92        | [buybackoff/1brc](https://github.com/buybackoff/1brc)| osx-x64| [Victor Baybekov](https://github.com/buybackoff)|
 | 2.| 00:03.62        | [pedrosakuma/1brc](https://github.com/pedrosakuma/1brc)| osx-x64| [Pedro Travi](https://github.com/pedrosakuma)|
-| 3.| 00:30.81        | [F0b0s/1brc](https://github.com/F0b0s/1brc)| osx-x64| [Sergey Popov](https://github.com/F0b0s)|
-| 4.| 00:51.76        | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)| osx-x64| [Frank Krueger](https://github.com/praeclarum)|
-| 5.| 02:53.86        | [KristofferStrube/Blazor1brc](https://github.com/KristofferStrube/Blazor1brc)| wasm| [Kristoffer Strube](https://github.com/KristofferStrube)|
-| 6.| 03:18.31        | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)| osx-x64| [Frank Krueger](https://github.com/praeclarum)|
+| 3.| 00:06.04        | [hexawyz/OneBillionRows](https://github.com/hexawyz/OneBillionRows)| osx-x64| [Fabien Barbier](https://github.com/hexawyz)|
+| 4.| 00:30.81        | [F0b0s/1brc](https://github.com/F0b0s/1brc)| osx-x64| [Sergey Popov](https://github.com/F0b0s)|
+| 5.| 00:51.76        | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)| osx-x64| [Frank Krueger](https://github.com/praeclarum)|
+| 6.| 02:53.86        | [KristofferStrube/Blazor1brc](https://github.com/KristofferStrube/Blazor1brc)| wasm| [Kristoffer Strube](https://github.com/KristofferStrube)|
+| 7.| 03:18.31        | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)| osx-x64| [Frank Krueger](https://github.com/praeclarum)|
 
 ## Running
 

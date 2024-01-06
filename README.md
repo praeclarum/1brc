@@ -7,8 +7,9 @@
 
 | # | Result (m:s.ms) | Implementation     | SDK | Submitter     |
 |---|-----------------|--------------------|-----|---------------|
-| 1.| 00:51.76        | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)| 8.0.100| [Frank Krueger](https://github.com/praeclarum)|
-| 2.| 03:18.31        | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)| 8.0.100| [Frank Krueger](https://github.com/praeclarum)|
+| 1.| 00:02.92        | [buybackoff/1brc](https://github.com/buybackoff/1brc)| 8.0.100| [Victor Baybekov](https://github.com/praeclarum)|
+| 2.| 00:51.76        | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)| 8.0.100| [Frank Krueger](https://github.com/praeclarum)|
+| 3.| 03:18.31        | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)| 8.0.100| [Frank Krueger](https://github.com/praeclarum)|
 
 ## Running
 

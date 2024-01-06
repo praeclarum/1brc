@@ -13,20 +13,20 @@
 ## Running
 
 ```bash
-dotnet run
+dotnet run measurements-20.txt
 ```
 
 ### macOS Intel 64-bit Optimized
 
 ```bash
 dotnet publish -c Release -r osx-x64 --self-contained
-time bin/Release/net8.0/osx-x64/publish/1brc
+time bin/Release/net8.0/osx-x64/publish/1brc measurements.txt
 ```
 
 ## Profiling
 
 ```bash
-dotnet-trace collect --duration 00:00:10 -- bin/Release/net8.0/osx-x64/publish/1brc
+dotnet-trace collect --duration 00:00:10 -- bin/Release/net8.0/osx-x64/publish/1brc measurements.txt
 dotnet-trace convert 1brc_yyyymmdd_hhmmss.nettrace --format Speedscope
 ```
 

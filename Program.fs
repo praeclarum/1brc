@@ -1,10 +1,13 @@
 ﻿// 1 Billion Row Challenge in F#
 
-let test = try System.Boolean.Parse(System.Environment.GetEnvironmentVariable("TEST"))
-           with _ -> false
-let measurementsPath =
-    if test then "/Users/fak/Projects/1brc-main/src/test/resources/samples/measurements-20.txt"
-    else "/Users/fak/Projects/1brc-main/measurements.txt"
-
-// Baseline.run measurementsPath
-LexedAndHashed.run measurementsPath
+[<EntryPoint>]
+let main argv =
+    let measurementsPath =
+        argv
+        |> Seq.filter (fun arg -> arg.EndsWith(".txt", System.StringComparison.OrdinalIgnoreCase))
+        |> Seq.tryHead
+        |> Option.defaultValue "measurements-20.txt"
+    
+    // Baseline.run measurementsPath
+    LexedAndHashed.run measurementsPath
+    0

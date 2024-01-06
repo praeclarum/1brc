@@ -1,7 +1,7 @@
 // 1 Billion Row Challenge in F#
 // Lexer and Hashed Station Names
 
-module Lexed
+module LexedAndHashed
 
 open System
 open System.Buffers.Text
@@ -25,7 +25,8 @@ let run (measurementsPath : string) =
     let mutable filePtr: nativeptr<byte> = NativePtr.nullPtr<byte>
     mmapA.SafeMemoryMappedViewHandle.AcquirePointer(&filePtr)
     let fileLength = mmapA.Capacity
-    let stations = Dictionary<string, StationData>()
+    let stations = Dictionary<int, StationData>()
+    let stationNames = Dictionary<int, string>()
     let mutable count: int64 = 0
     let mutable printedCount: int64 = 0
     let stopwatch = System.Diagnostics.Stopwatch.StartNew()
@@ -60,23 +61,23 @@ let run (measurementsPath : string) =
             p <- NativePtr.add p 1
             index <- index + 1L
         | ParseState.ReadingTemperature, '\n'B ->
-            let name = utf8.GetString (namePtr, nameLength)
             Utf8Parser.TryParse(ReadOnlySpan<byte>(NativePtr.toVoidPtr tempPtr, tempLength), &temp) |> ignore
             // printfn "%s = %.1f" name temp
-            if stations.TryGetValue(name, &entry) then
-                stations.[name] <- {
+            if stations.TryGetValue(nameHash, &entry) then
+                stations.[nameHash] <- {
                     Min = min entry.Min temp
                     Max = max entry.Max temp
                     Sum = entry.Sum + temp
                     Count = entry.Count + 1
                 }
             else
-                stations.Add(name, {
+                stations.Add(nameHash, {
                     Min = temp
                     Max = temp
                     Sum = temp
                     Count = 1
                 })
+                stationNames.Add(nameHash, utf8.GetString (namePtr, nameLength))
             p <- NativePtr.add p 1
             index <- index + 1L
             count <- count + 1L
@@ -96,10 +97,11 @@ let run (measurementsPath : string) =
             printfn "Processed %d lines (index=%A) (est %O)" count index estimatedTotalTime
     let sortedStations =
         stations
-        |> Seq.sortBy (fun (kv : KeyValuePair<string, StationData>) -> kv.Key)
+        |> Seq.map (fun (kv : KeyValuePair<int, StationData>) -> stationNames.[kv.Key], kv.Value)
+        |> Seq.sortBy fst
     let mutable head = "{"
     for station in sortedStations do
-        let e = station.Value
-        printf "%s%s=%.1f/%.1f/%.1f" head station.Key e.Min (e.Sum / double e.Count) e.Max
+        let name, e = station
+        printf "%s%s=%.1f/%.1f/%.1f" head name e.Min (e.Sum / double e.Count) e.Max
         head <- ", "
     printfn "}"

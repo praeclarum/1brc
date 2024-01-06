@@ -15,10 +15,6 @@ open Baseline
 
 let private utf8 = System.Text.Encoding.UTF8
 
-type ParseState =
-    | ReadingName = 0
-    | ReadingTemperature = 1
-
 let run (measurementsPath : string) =
     let mmap = MemoryMappedFiles.MemoryMappedFile.CreateFromFile(measurementsPath, FileMode.Open)
     let mmapA = mmap.CreateViewAccessor()
@@ -36,59 +32,52 @@ let run (measurementsPath : string) =
         Sum = 0.0
         Count = 0
     }
-    let mutable state = ParseState.ReadingName
     let mutable p = filePtr
     let mutable index: int64 = 0
-    let mutable nameHash = 0
-    let mutable namePtr = p
-    let mutable nameLength = 0
-    let mutable tempPtr = p
-    let mutable tempLength = 0
-    let mutable temp: double = 0.0
     while index < fileLength do
-        let b = NativePtr.read p
-        
-        match state, b with
-        | ParseState.ReadingName, ';'B ->
-            p <- NativePtr.add p 1
-            index <- index + 1L
-            state <- ParseState.ReadingTemperature
-            tempPtr <- p
-            tempLength <- 0
-        | ParseState.ReadingName, _ ->
+        let mutable namePtr = p
+        let mutable nameLength = 0
+        let mutable nameHash = 0
+        let mutable b = NativePtr.read namePtr
+        while b <> ';'B do
             nameHash <- nameHash * 33 + int b
             nameLength <- nameLength + 1
-            p <- NativePtr.add p 1
-            index <- index + 1L
-        | ParseState.ReadingTemperature, '\n'B ->
-            Utf8Parser.TryParse(ReadOnlySpan<byte>(NativePtr.toVoidPtr tempPtr, tempLength), &temp) |> ignore
-            // printfn "%s = %.1f" name temp
-            if stations.TryGetValue(nameHash, &entry) then
-                stations.[nameHash] <- {
-                    Min = min entry.Min temp
-                    Max = max entry.Max temp
-                    Sum = entry.Sum + temp
-                    Count = entry.Count + 1
-                }
-            else
-                stations.Add(nameHash, {
-                    Min = temp
-                    Max = temp
-                    Sum = temp
-                    Count = 1
-                })
-                stationNames.Add(nameHash, utf8.GetString (namePtr, nameLength))
-            p <- NativePtr.add p 1
-            index <- index + 1L
-            count <- count + 1L
-            state <- ParseState.ReadingName
-            namePtr <- p
-            nameHash <- 0
-            nameLength <- 0
-        | _, _ ->
-            p <- NativePtr.add p 1
-            index <- index + 1L
+            b <- NativePtr.get namePtr nameLength
+
+        let mutable tempPtr = NativePtr.add p (nameLength + 1)
+        let mutable tempLength = 0
+        let mutable temp: double = 0.0
+        b <- NativePtr.read tempPtr
+        while b <> '\n'B do
             tempLength <- tempLength + 1
+            b <- NativePtr.get tempPtr tempLength
+            
+        let newlineOffset = nameLength + tempLength + 2
+        p <- NativePtr.add p newlineOffset
+        index <- index + int64 newlineOffset
+        
+        // let debugName = utf8.GetString (namePtr, nameLength)
+        // let debugTemp = utf8.GetString (tempPtr, tempLength)
+        // printfn "%A = %A" debugName debugTemp
+
+        Utf8Parser.TryParse(ReadOnlySpan<byte>(NativePtr.toVoidPtr tempPtr, tempLength), &temp) |> ignore
+        // printfn "%s = %.1f" name temp
+        if stations.TryGetValue(nameHash, &entry) then
+            stations.[nameHash] <- {
+                Min = min entry.Min temp
+                Max = max entry.Max temp
+                Sum = entry.Sum + temp
+                Count = entry.Count + 1
+            }
+        else
+            stations.Add(nameHash, {
+                Min = temp
+                Max = temp
+                Sum = temp
+                Count = 1
+            })
+            stationNames.Add(nameHash, utf8.GetString (namePtr, nameLength))
+        count <- count + 1L
                 
         if (count - printedCount) >= 10_000_000L then
             printedCount <- count

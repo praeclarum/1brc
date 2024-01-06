@@ -13,13 +13,6 @@ open Baseline
 
 #nowarn "9"
 
-type StationDataObject = {
-    mutable Min : double
-    mutable Max : double
-    mutable Sum : double
-    mutable Count : int
-}
-
 let private utf8 = System.Text.Encoding.UTF8
 
 let run (measurementsPath : string) =

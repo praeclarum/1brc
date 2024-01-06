@@ -8,20 +8,19 @@ open System
 open System.Collections.Generic
 open System.IO
 
-[<Struct>]
-type StationData = {
-    Min : double
-    Max : double
-    Sum : double
-    Count : int
+type StationDataObject = {
+    mutable Min : double
+    mutable Max : double
+    mutable Sum : double
+    mutable Count : int
 }
 
 let run (measurementsPath : string) =
     let bufferSize = 64*1024
     use measurementsStream = new FileStream(measurementsPath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan)
     use measurements = new StreamReader(measurementsStream, System.Text.Encoding.UTF8, true, bufferSize)
-    let stations = Dictionary<string, StationData>()
-    let mutable entry: StationData = {
+    let stations = Dictionary<string, StationDataObject>()
+    let mutable entry: StationDataObject = {
         Min = 0.0
         Max = 0.0
         Sum = 0.0
@@ -36,12 +35,10 @@ let run (measurementsPath : string) =
         let temp = double(parts.[1])
         match stations.TryGetValue(station, &entry) with
         | true ->
-            stations.[station] <- {
-                Min = min entry.Min temp
-                Max = max entry.Max temp
-                Sum = entry.Sum + temp
-                Count = entry.Count + 1
-            }
+            entry.Min <- min entry.Min temp
+            entry.Max <- max entry.Max temp
+            entry.Sum <- entry.Sum + temp
+            entry.Count <- entry.Count + 1
         | false ->
             stations.[station] <- {
                 Min = temp
@@ -57,7 +54,7 @@ let run (measurementsPath : string) =
             printfn "Processed %d lines (est %O)" count estimatedTotalTime
     let sortedStations =
         stations
-        |> Seq.sortBy (fun (kv : KeyValuePair<string, StationData>) -> kv.Key)
+        |> Seq.sortBy (fun (kv : KeyValuePair<string, StationDataObject>) -> kv.Key)
     let mutable head = "{"
     for station in sortedStations do
         let e = station.Value

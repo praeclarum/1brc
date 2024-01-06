@@ -7,5 +7,4 @@ let measurementsPath =
     else "/Users/fak/Projects/1brc-main/measurements.txt"
 
 // Baseline.run measurementsPath
-// MemoryMapped.run measurementsPath
 LexedAndHashed.run measurementsPath

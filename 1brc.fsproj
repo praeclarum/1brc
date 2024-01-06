@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Include="Baseline.fs" />
-    <Compile Include="MemoryMapped.fs" />
     <Compile Include="LexedAndHashed.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

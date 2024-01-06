@@ -18,8 +18,9 @@ let private utf8 = System.Text.Encoding.UTF8
 type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
     let stations = Dictionary<int, StationDataObject>()
     let stationNames = Dictionary<int, string>()
-    member this.Stations = stations
-    member this.StationNames = stationNames
+    member this.Stations =
+        stations
+        |> Seq.map (fun (kv : KeyValuePair<int, StationDataObject>) -> stationNames.[kv.Key], kv.Value)
     member this.Run() =
         let mutable count: int64 = 0
         let mutable printedCount: int64 = 0
@@ -100,7 +101,6 @@ let run (measurementsPath : string) =
     processor.Run()
     let sortedStations =
         processor.Stations
-        |> Seq.map (fun (kv : KeyValuePair<int, StationDataObject>) -> processor.StationNames.[kv.Key], kv.Value)
         |> Seq.sortBy fst
     let mutable head = "{"
     for station in sortedStations do

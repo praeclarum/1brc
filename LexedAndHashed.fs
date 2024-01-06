@@ -34,16 +34,16 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
         let mutable p = chunkPtr
         let mutable index: int64 = 0
         while index < chunkLength do
-            let mutable namePtr = p
+            // 1. Read and hash station name
             let mutable nameLength = 0
             let mutable nameHash = 0
-            let mutable b = NativePtr.read namePtr
+            let mutable b = NativePtr.read p
             while b <> ';'B do
                 nameHash <- nameHash * 33 + int b
                 nameLength <- nameLength + 1
-                b <- NativePtr.get namePtr nameLength
-    
-            let mutable tempPtr = NativePtr.add p (nameLength + 1)
+                b <- NativePtr.get p nameLength
+            // 2. Read temperature
+            let tempPtr = NativePtr.add p (nameLength + 1)
             let mutable tempLength = 0
             let mutable temp: double = 0.0
             b <- NativePtr.read tempPtr
@@ -59,17 +59,8 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
             tempLength <- tempLength + 2
             temp <- temp + double (dec - '0'B) * 0.1
             if isNeg then
-                temp <- -temp
-    
-            let newlineOffset = nameLength + tempLength + 2
-            p <- NativePtr.add p newlineOffset
-            index <- index + int64 newlineOffset
-            
-            // let debugName = utf8.GetString (namePtr, nameLength)
-            // let debugTemp = utf8.GetString (tempPtr, tempLength)
-            // printfn "%A = %A" debugName debugTemp
-    
-            // printfn "%s = %.1f" name temp
+                temp <- -temp    
+            // 3. Update station data
             if stations.TryGetValue(nameHash, &entry) then
                 entry.Min <- min entry.Min temp
                 entry.Max <- max entry.Max temp
@@ -82,9 +73,13 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
                     Sum = temp
                     Count = 1
                 })
-                stationNames.Add(nameHash, utf8.GetString (namePtr, nameLength))
+                stationNames.Add(nameHash, utf8.GetString (p, nameLength))
             count <- count + 1L
-                    
+            // 4. Skip to next line
+            let newlineOffset = nameLength + tempLength + 2
+            p <- NativePtr.add p newlineOffset
+            index <- index + int64 newlineOffset
+            // 5. Print progress
             if (count - printedCount) >= 50_000_000L then
                 printedCount <- count
                 let entriesPerSecond = (float count) / stopwatch.Elapsed.TotalSeconds

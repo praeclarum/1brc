@@ -5,12 +5,15 @@
 
 ## Results
 
-| # | Result (m:s.ms) | Implementation     | SDK | Submitter     |
+Tested on a 3GHz 10-core Xeon W iMac Pro 2017.
+
+| # | Result (m:s.ms) | Implementation     | Runtime | Submitter     |
 |---|-----------------|--------------------|-----|---------------|
-| 1.| 00:02.92        | [buybackoff/1brc](https://github.com/buybackoff/1brc)| 8.0.100| [Victor Baybekov](https://github.com/praeclarum)|
-| 2.| 00:30.81        | [F0b0s/1brc](https://github.com/F0b0s/1brc)| 8.0.100| [Sergey Popov](https://github.com/F0b0s)|
-| 3.| 00:51.76        | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)| 8.0.100| [Frank Krueger](https://github.com/praeclarum)|
-| 4.| 03:18.31        | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)| 8.0.100| [Frank Krueger](https://github.com/praeclarum)|
+| 1.| 00:02.92        | [buybackoff/1brc](https://github.com/buybackoff/1brc)| osx-x64| [Victor Baybekov](https://github.com/buybackoff)|
+| 2.| 00:30.81        | [F0b0s/1brc](https://github.com/F0b0s/1brc)| osx-x64| [Sergey Popov](https://github.com/F0b0s)|
+| 3.| 00:51.76        | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)| osx-x64| [Frank Krueger](https://github.com/praeclarum)|
+| 4.| 02:53.86        | [KristofferStrube/Blazor1brc](https://github.com/KristofferStrube/Blazor1brc)| wasm| [Kristoffer Strube](https://github.com/KristofferStrube)|
+| 5.| 03:18.31        | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)| osx-x64| [Frank Krueger](https://github.com/praeclarum)|
 
 ## Running
 

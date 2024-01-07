@@ -16,8 +16,9 @@ open Baseline
 let private utf8 = System.Text.Encoding.UTF8
 
 type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
-    let stations = Dictionary<int, StationDataObject>()
-    let stationNames = Dictionary<int, string>()
+    let stations = Dictionary<int, StationDataObject>(1024)
+    let stationNames = Dictionary<int, string>(1024)
+    member this.Length = chunkLength
     member this.Stations =
         stations
         |> Seq.map (fun (kv : KeyValuePair<int, StationDataObject>) -> stationNames.[kv.Key], kv.Value)
@@ -39,7 +40,7 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
             let mutable nameHash = 0
             let mutable b = NativePtr.read p
             while b <> ';'B do
-                nameHash <- nameHash * 33 + int b
+                nameHash <- nameHash * 311 + int b
                 nameLength <- nameLength + 1
                 b <- NativePtr.get p nameLength
             // 2. Read temperature
@@ -84,7 +85,7 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
                 printedCount <- count
                 let entriesPerSecond = (float count) / stopwatch.Elapsed.TotalSeconds
                 let estimatedTotalTime = TimeSpan.FromSeconds (1.0e9 / entriesPerSecond)
-                printfn "Processed %d lines (index=%A) (est %O)" count index estimatedTotalTime
+                printfn $"Processed %d{count} lines (index=%O{index}) (est {estimatedTotalTime})"
 
 let run (measurementsPath : string) =
     let mmap = MemoryMappedFiles.MemoryMappedFile.CreateFromFile(measurementsPath, FileMode.Open)
@@ -100,6 +101,6 @@ let run (measurementsPath : string) =
     let mutable head = "{"
     for station in sortedStations do
         let name, e = station
-        printf "%s%s=%.1f/%.1f/%.1f" head name e.Min (e.Sum / double e.Count) e.Max
+        printf $"%s{head}%s{name}=%.1f{e.Min}/%.1f{e.Sum / double e.Count}/%.1f{e.Max}"
         head <- ", "
     printfn "}"

@@ -4,11 +4,17 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>_1brc</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PublishAot>true</PublishAot>
+    <OptimizationPreference>Speed</OptimizationPreference>
+    <IlcInstructionSet>native</IlcInstructionSet>
+    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Baseline.fs" />
     <Compile Include="LexedAndHashed.fs" />
+    <Compile Include="Multithreaded.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

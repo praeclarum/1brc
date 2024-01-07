@@ -48,16 +48,16 @@ let run (measurementsPath : string) =
             }
         count <- count + 1
         line <- measurements.ReadLine()
-        if (count % 10000000) = 0 then
+        if (count % 50_000_000) = 0 then
             let entriesPerSecond = (float count) / stopwatch.Elapsed.TotalSeconds
             let estimatedTotalTime = TimeSpan.FromSeconds (1.0e9 / entriesPerSecond)
-            printfn "Processed %d lines (est %O)" count estimatedTotalTime
+            printfn $"Processed %d{count} lines (est {estimatedTotalTime})"
     let sortedStations =
         stations
         |> Seq.sortBy (fun (kv : KeyValuePair<string, StationDataObject>) -> kv.Key)
     let mutable head = "{"
     for station in sortedStations do
         let e = station.Value
-        printf "%s%s=%.1f/%.1f/%.1f" head station.Key e.Min (e.Sum / double e.Count) e.Max
+        printf $"%s{head}%s{station.Key}=%.1f{e.Min}/%.1f{e.Sum / double e.Count}/%.1f{e.Max}"
         head <- ", "
     printfn "}"

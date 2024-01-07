@@ -9,5 +9,6 @@ let main argv =
         |> Option.defaultValue "measurements-20.txt"
     
     // Baseline.run measurementsPath
-    LexedAndHashed.run measurementsPath
+    // LexedAndHashed.run measurementsPath
+    Multithreaded.run measurementsPath
     0

@@ -39,8 +39,8 @@ let chunkify (chunkPtr : nativeptr<byte>) (length : int64) : ResizeArray<ChunkPr
             failwithf $"Chunk lengths don't add up: {totalChunkLength} <> {length}"
     chunks
 
-let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, StationDataObject> =
-    let merged = Dictionary<string, StationDataObject>(1024)
+let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, StationDataFixed> =
+    let merged = Dictionary<string, StationDataFixed>(1024)
     for result in results do
         for name, e in result.Stations do
             if merged.ContainsKey name then
@@ -80,7 +80,7 @@ let run (measurementsPath : string) =
     let mutable head = "{"
     for station in sortedStations do
         let name, e = station
-        printf $"%s{head}%s{name}=%.1f{e.Min}/%.1f{e.Sum / double e.Count}/%.1f{e.Max}"
+        printf $"%s{head}%s{name}=%.1f{float e.Min * 0.1}/%.1f{float e.Sum * 0.1 / float e.Count}/%.1f{float e.Max * 0.1}"
         head <- ", "
     printfn "}"
     stopwatch.Stop ()

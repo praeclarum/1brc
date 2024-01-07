@@ -13,21 +13,28 @@ open Baseline
 
 #nowarn "9"
 
+type StationDataFixed = {
+    mutable Min : int
+    mutable Max : int
+    mutable Sum : int
+    mutable Count : int
+}
+
 let private utf8 = System.Text.Encoding.UTF8
 
 type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
-    let stations = Dictionary<int, StationDataObject>(1024)
+    let stations = Dictionary<int, StationDataFixed>(1024)
     let stationNames = Dictionary<int, string>(1024)
     member this.Length = chunkLength
     member this.Stations =
         stations
-        |> Seq.map (fun (kv : KeyValuePair<int, StationDataObject>) -> stationNames.[kv.Key], kv.Value)
+        |> Seq.map (fun kv -> stationNames.[kv.Key], kv.Value)
     member this.Run() =
         let mutable count: int64 = 0
-        let mutable entry: StationDataObject = {
-            Min = 0.0
-            Max = 0.0
-            Sum = 0.0
+        let mutable entry: StationDataFixed = {
+            Min = 0
+            Max = 0
+            Sum = 0
             Count = 0
         }
         let mutable p = chunkPtr
@@ -49,14 +56,14 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
             if isNeg then
                 tempLength <- tempLength + 1
                 b <- NativePtr.get tempPtr tempLength
-            let mutable tempInt = 0
+            let mutable temp = 0
             while b <> '.'B do
                 tempLength <- tempLength + 1
-                tempInt <- tempInt + int (b - '0'B)
+                temp <- temp * 10 + int (b - '0'B)
                 b <- NativePtr.get tempPtr tempLength
             let dec = NativePtr.get tempPtr (tempLength + 1)
             tempLength <- tempLength + 2
-            let mutable temp = double tempInt + double (dec - '0'B) * 0.1
+            temp <- temp * 10 + int (dec - '0'B)
             if isNeg then
                 temp <- -temp    
             // 3. Update station data
@@ -93,6 +100,6 @@ let run (measurementsPath : string) =
     let mutable head = "{"
     for station in sortedStations do
         let name, e = station
-        printf $"%s{head}%s{name}=%.1f{e.Min}/%.1f{e.Sum / double e.Count}/%.1f{e.Max}"
+        printf $"%s{head}%s{name}=%.1f{float e.Min * 0.1}/%.1f{float e.Sum * 0.1 / float e.Count}/%.1f{float e.Max * 0.1}"
         head <- ", "
     printfn "}"

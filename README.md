@@ -10,7 +10,7 @@ Tested on a 3GHz 10-core Xeon W iMac Pro 2017.
 | #  | Result (m:s.ms) | Language | Implementation                                                                                                            | Runtime      | Submitter     |
 |----|-----------------|----------|---------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
 | 1. | 00:02.69        | C#       | [buybackoff/1brc](https://github.com/buybackoff/1brc)                                                                     | net8/osx-x64 | [Victor Baybekov](https://github.com/buybackoff)|
-| 2. | 00:03.26        | F#       | [Multithreaded.fs](https://github.com/praeclarum/1brc/blob/main/Multithreaded.fs)                                         | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
+| 2. | 00:02.89        | F#       | [Multithreaded.fs](https://github.com/praeclarum/1brc/blob/main/Multithreaded.fs)                                         | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
 | 3. | 00:03.62        | C#       | [pedrosakuma/1brc](https://github.com/pedrosakuma/1brc)                                                                   | net8/osx-x64 | [Pedro Travi](https://github.com/pedrosakuma)|
 | 4. | 00:06.04        | C#       | [hexawyz/OneBillionRows](https://github.com/hexawyz/OneBillionRows)                                                       | net8/osx-x64 | [Fabien Barbier](https://github.com/hexawyz)|
 | 5. | 00:30.81        | C#       | [F0b0s/1brc](https://github.com/F0b0s/1brc)                                                                               | net8/osx-x64 | [Sergey Popov](https://github.com/F0b0s)|

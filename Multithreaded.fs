@@ -1,3 +1,6 @@
+// 1 Billion Row Challenge in F#
+// One thread per 256 MB chunk
+
 module Multithreaded
 
 open System
@@ -33,10 +36,11 @@ let chunkify (chunkPtr : nativeptr<byte>) (length : int64) : ResizeArray<ChunkPr
         // Output previous chunk
         chunks.Add(ChunkProcessor(p, chunkLength))
         p <- pNextChunk
-    if true then
-        let totalChunkLength = chunks |> Seq.sumBy (fun c -> c.Length)
-        if totalChunkLength <> length then
-            failwithf $"Chunk lengths don't add up: {totalChunkLength} <> {length}"
+#if DEBUG
+    let totalChunkLength = chunks |> Seq.sumBy (fun c -> c.Length)
+    if totalChunkLength <> length then
+        failwithf $"Chunk lengths don't add up: {totalChunkLength} <> {length}"
+#endif
     chunks
 
 let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, StationDataFixed> =
@@ -51,7 +55,6 @@ let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, St
                 e2.Max <- max e2.Max e.Max
             else
                 merged.Add(name, e)
-    printfn $"NUM STATIONS: %d{merged.Count}"
     merged
 
 let run (measurementsPath : string) =
@@ -70,6 +73,8 @@ let run (measurementsPath : string) =
         |> Array.ofSeq
     for thread in threads do
         thread.Start()
+    let out = System.Console.Out
+    out.Write "{"
     for thread in threads do
         thread.Join()
     
@@ -77,11 +82,13 @@ let run (measurementsPath : string) =
         mergeResults chunks
         |> Seq.map (fun kv -> kv.Key, kv.Value)
         |> Seq.sortBy fst
-    let mutable head = "{"
+    let mutable head = ""
     for station in sortedStations do
         let name, e = station
-        printf $"%s{head}%s{name}=%.1f{float e.Min * 0.1}/%.1f{float e.Sum * 0.1 / float e.Count}/%.1f{float e.Max * 0.1}"
+        out.Write head
+        out.Write name
+        out.Write $"=%.1f{float e.Min * 0.1}/%.1f{float e.Sum * 0.1 / float e.Count}/%.1f{float e.Max * 0.1}"
         head <- ", "
-    printfn "}"
+    out.WriteLine("}")
     stopwatch.Stop ()
     printfn $"ELAPSED: {stopwatch}"

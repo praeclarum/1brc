@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>_1brc</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <PublishAot>true</PublishAot>
+    <PublishAot>false</PublishAot>
     <OptimizationPreference>Speed</OptimizationPreference>
     <IlcInstructionSet>native</IlcInstructionSet>
     <PublishReadyToRun>true</PublishReadyToRun>
@@ -15,6 +15,7 @@
     <Compile Include="Baseline.fs" />
     <Compile Include="LexedAndHashed.fs" />
     <Compile Include="Multithreaded.fs" />
+    <Compile Include="BinaryTree.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

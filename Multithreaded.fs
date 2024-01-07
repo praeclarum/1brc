@@ -51,10 +51,11 @@ let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, St
                 e2.Max <- max e2.Max e.Max
             else
                 merged.Add(name, e)
-    printfn "NUM STATIONS: %d" merged.Count
+    printfn $"NUM STATIONS: %d{merged.Count}"
     merged
 
 let run (measurementsPath : string) =
+    let stopwatch = System.Diagnostics.Stopwatch.StartNew()
     let mmap = MemoryMappedFiles.MemoryMappedFile.CreateFromFile(measurementsPath, FileMode.Open)
     let mmapA = mmap.CreateViewAccessor()
     let mutable filePtr: nativeptr<byte> = NativePtr.nullPtr<byte>
@@ -76,3 +77,5 @@ let run (measurementsPath : string) =
         printf $"%s{head}%s{name}=%.1f{e.Min}/%.1f{e.Sum / double e.Count}/%.1f{e.Max}"
         head <- ", "
     printfn "}"
+    stopwatch.Stop ()
+    printfn $"ELAPSED: {stopwatch}"

@@ -9,7 +9,7 @@ Tested on a 3GHz 10-core Xeon W iMac Pro 2017.
 
 | # | Result (m:s.ms) | Implementation     | Runtime | Submitter     |
 |---|-----------------|--------------------|-----|---------------|
-| 1.| 00:02.92        | [buybackoff/1brc](https://github.com/buybackoff/1brc)| osx-x64| [Victor Baybekov](https://github.com/buybackoff)|
+| 1.| 00:02.69        | [buybackoff/1brc](https://github.com/buybackoff/1brc)| osx-x64| [Victor Baybekov](https://github.com/buybackoff)|
 | 2.| 00:03.62        | [pedrosakuma/1brc](https://github.com/pedrosakuma/1brc)| osx-x64| [Pedro Travi](https://github.com/pedrosakuma)|
 | 3.| 00:06.04        | [hexawyz/OneBillionRows](https://github.com/hexawyz/OneBillionRows)| osx-x64| [Fabien Barbier](https://github.com/hexawyz)|
 | 4.| 00:30.81        | [F0b0s/1brc](https://github.com/F0b0s/1brc)| osx-x64| [Sergey Popov](https://github.com/F0b0s)|

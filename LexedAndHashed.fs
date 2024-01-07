@@ -24,8 +24,6 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
         |> Seq.map (fun (kv : KeyValuePair<int, StationDataObject>) -> stationNames.[kv.Key], kv.Value)
     member this.Run() =
         let mutable count: int64 = 0
-        let mutable printedCount: int64 = 0
-        let stopwatch = System.Diagnostics.Stopwatch.StartNew()
         let mutable entry: StationDataObject = {
             Min = 0.0
             Max = 0.0
@@ -46,19 +44,19 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
             // 2. Read temperature
             let tempPtr = NativePtr.add p (nameLength + 1)
             let mutable tempLength = 0
-            let mutable temp: double = 0.0
             b <- NativePtr.read tempPtr
             let isNeg = b = '-'B
             if isNeg then
                 tempLength <- tempLength + 1
                 b <- NativePtr.get tempPtr tempLength
+            let mutable tempInt = 0
             while b <> '.'B do
                 tempLength <- tempLength + 1
-                temp <- temp * 10.0 + double (b - '0'B)
+                tempInt <- tempInt + int (b - '0'B)
                 b <- NativePtr.get tempPtr tempLength
             let dec = NativePtr.get tempPtr (tempLength + 1)
             tempLength <- tempLength + 2
-            temp <- temp + double (dec - '0'B) * 0.1
+            let mutable temp = double tempInt + double (dec - '0'B) * 0.1
             if isNeg then
                 temp <- -temp    
             // 3. Update station data
@@ -80,12 +78,6 @@ type ChunkProcessor(chunkPtr: nativeptr<byte>, chunkLength: int64) =
             let newlineOffset = nameLength + tempLength + 2
             p <- NativePtr.add p newlineOffset
             index <- index + int64 newlineOffset
-            // 5. Print progress
-            if (count - printedCount) >= 50_000_000L then
-                printedCount <- count
-                let entriesPerSecond = (float count) / stopwatch.Elapsed.TotalSeconds
-                let estimatedTotalTime = TimeSpan.FromSeconds (1.0e9 / entriesPerSecond)
-                printfn $"Processed %d{count} lines (index=%O{index}) (est {estimatedTotalTime})"
 
 let run (measurementsPath : string) =
     let mmap = MemoryMappedFiles.MemoryMappedFile.CreateFromFile(measurementsPath, FileMode.Open)

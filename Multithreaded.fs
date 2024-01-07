@@ -63,9 +63,15 @@ let run (measurementsPath : string) =
     let fileLength = mmapA.Capacity
     
     let chunks = chunkify filePtr fileLength
-    System.Threading.Tasks.Parallel.ForEach(chunks, fun (chunk : ChunkProcessor) ->
-        chunk.Run())
-    |> ignore    
+    
+    let threads =
+        chunks
+        |> Seq.map (fun c -> new System.Threading.Thread(fun () -> c.Run()))
+        |> Array.ofSeq
+    for thread in threads do
+        thread.Start()
+    for thread in threads do
+        thread.Join()
     
     let sortedStations =
         mergeResults chunks

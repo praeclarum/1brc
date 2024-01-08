@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>_1brc</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <PublishAot>false</PublishAot>
+    <PublishAot>true</PublishAot>
     <OptimizationPreference>Speed</OptimizationPreference>
     <IlcInstructionSet>native</IlcInstructionSet>
     <PublishReadyToRun>true</PublishReadyToRun>

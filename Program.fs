@@ -10,5 +10,6 @@ let main argv =
     
     // Baseline.run measurementsPath
     // LexedAndHashed.run measurementsPath
-    Multithreaded.run measurementsPath
+    // Multithreaded.run measurementsPath
+    BinaryTree.run measurementsPath
     0

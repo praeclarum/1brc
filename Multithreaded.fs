@@ -11,9 +11,9 @@ open LexedAndHashed
 
 #nowarn "9"
 
-let chunkify (chunkPtr : nativeptr<byte>) (length : int64) : ResizeArray<ChunkProcessor> =
+let chunkify (chunkPtr : nativeptr<byte>) (length : int64) (factory : nativeptr<byte> -> int64 -> 'a) : ResizeArray<'a> =
     let idealChunkLength = 256 * 1024 * 1024
-    let chunks = ResizeArray<ChunkProcessor>()
+    let chunks = ResizeArray<'a>()
     let mutable offset = 0L
     let mutable p = chunkPtr
     while offset < length do
@@ -31,12 +31,8 @@ let chunkify (chunkPtr : nativeptr<byte>) (length : int64) : ResizeArray<ChunkPr
             chunkLength <- chunkLength + 1
             offset <- offset + 1L
         // Output previous chunk
-        chunks.Add(ChunkProcessor(p, chunkLength))
+        chunks.Add(factory p chunkLength)
         p <- pNextChunk
-    if true then
-        let totalChunkLength = chunks |> Seq.sumBy (fun c -> c.Length)
-        if totalChunkLength <> length then
-            failwithf $"Chunk lengths don't add up: {totalChunkLength} <> {length}"
     chunks
 
 let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, StationDataFixed> =
@@ -62,7 +58,7 @@ let run (measurementsPath : string) =
     mmapA.SafeMemoryMappedViewHandle.AcquirePointer(&filePtr)
     let fileLength = mmapA.Capacity
     
-    let chunks = chunkify filePtr fileLength
+    let chunks = chunkify filePtr fileLength (fun p l -> ChunkProcessor(p, l))
     
     let threads =
         chunks

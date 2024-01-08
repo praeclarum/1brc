@@ -47,14 +47,14 @@ let mergeResults (results : ResizeArray<ChunkProcessor>) : Dictionary<string, St
     let merged = Dictionary<string, StationDataFixed>(1024)
     for result in results do
         for name, e in result.Stations do
-            if merged.ContainsKey name then
-                let e2 = merged.[name]
+            match merged.TryGetValue name with
+            | false, _ ->
+                merged.Add(name, e)
+            | true, e2 ->
                 e2.Count <- e2.Count + e.Count
                 e2.Sum <- e2.Sum + e.Sum
                 e2.Min <- min e2.Min e.Min
                 e2.Max <- max e2.Max e.Max
-            else
-                merged.Add(name, e)
     merged
 
 let run (measurementsPath : string) =

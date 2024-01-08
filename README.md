@@ -12,12 +12,13 @@ Tested on a 3GHz 10-core Xeon W iMac Pro 2017.
 | 1. | 00:02.68        | F#       | [Multithreaded.fs](https://github.com/praeclarum/1brc/blob/main/Multithreaded.fs)                                         | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
 | 2. | 00:02.69        | C#       | [buybackoff/1brc](https://github.com/buybackoff/1brc)                                                                     | net8/osx-x64 | [Victor Baybekov](https://github.com/buybackoff)|
 | 3. | 00:03.62        | C#       | [pedrosakuma/1brc](https://github.com/pedrosakuma/1brc)                                                                   | net8/osx-x64 | [Pedro Travi](https://github.com/pedrosakuma)|
-| 4. | 00:06.04        | C#       | [hexawyz/OneBillionRows](https://github.com/hexawyz/OneBillionRows)                                                       | net8/osx-x64 | [Fabien Barbier](https://github.com/hexawyz)|
-| 5. | 00:30.81        | C#       | [F0b0s/1brc](https://github.com/F0b0s/1brc)                                                                               | net8/osx-x64 | [Sergey Popov](https://github.com/F0b0s)|
-| 6. | 00:51.76        | F#       | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)                                       | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
-| 7. | 02:53.86        | C#       | [KristofferStrube/Blazor1brc](https://github.com/KristofferStrube/Blazor1brc)                                             | net8/wasm    | [Kristoffer Strube](https://github.com/KristofferStrube)|
-| 8. | 03:17.70        | Java     | [Java Baseline](https://github.com/gunnarmorling/onebrc/blob/main/src/main/java/dev/morling/onebrc/CalculateAverage.java) | java21       | [Gunnar Morling](https://github.com/gunnarmorling)|
-| 9. | 03:18.26        | F#       | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)                                                   | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
+| 4. | 00:04.80        | C#       | [Vake93/1brc](https://github.com/Vake93/1brc)                                                                   | net8/osx-x64 | [Vishvaka Ranasinghe](https://github.com/Vake93)|
+| 5. | 00:06.04        | C#       | [hexawyz/OneBillionRows](https://github.com/hexawyz/OneBillionRows)                                                       | net8/osx-x64 | [Fabien Barbier](https://github.com/hexawyz)|
+| 6. | 00:30.81        | C#       | [F0b0s/1brc](https://github.com/F0b0s/1brc)                                                                               | net8/osx-x64 | [Sergey Popov](https://github.com/F0b0s)|
+| 7. | 00:51.76        | F#       | [LexedAndHashed.fs](https://github.com/praeclarum/1brc/blob/main/LexedAndHashed.fs)                                       | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
+| 8. | 02:53.86        | C#       | [KristofferStrube/Blazor1brc](https://github.com/KristofferStrube/Blazor1brc)                                             | net8/wasm    | [Kristoffer Strube](https://github.com/KristofferStrube)|
+| 9. | 03:17.70        | Java     | [Java Baseline](https://github.com/gunnarmorling/onebrc/blob/main/src/main/java/dev/morling/onebrc/CalculateAverage.java) | java21       | [Gunnar Morling](https://github.com/gunnarmorling)|
+| 10. | 03:18.26        | F#       | [Baseline.fs](https://github.com/praeclarum/1brc/blob/main/Baseline.fs)                                                   | net8/osx-x64 | [Frank Krueger](https://github.com/praeclarum)|
 
 ## Running
 
